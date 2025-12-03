@@ -19,17 +19,8 @@ export const DashboardNavbar = () => {
     const { cartCount } = useCart();
     return (
         <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background/80 px-6 backdrop-blur-md">
-            <div className="w-full flex-1">
-                <form>
-                    <div className="relative">
-                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                        <Input
-                            type="search"
-                            placeholder="Search meals, plans..."
-                            className="w-full bg-background pl-8 md:w-[300px] lg:w-[400px] rounded-full focus-visible:ring-primary"
-                        />
-                    </div>
-                </form>
+            <div className="flex-1">
+                <h2 className="text-xl font-semibold">Dashboard</h2>
             </div>
             <div className="flex items-center gap-4">
                 <Button variant="ghost" size="icon" className="relative" onClick={() => navigate('/dashboard/cart')}>

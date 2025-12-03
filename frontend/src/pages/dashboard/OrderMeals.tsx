@@ -24,7 +24,11 @@ export const OrderMeals = () => {
     const [sortBy, setSortBy] = useState('recommended');
 
     const filteredMeals = SAMPLE_MEALS.filter(meal => {
-        const matchesSearch = meal.title.toLowerCase().includes(searchTerm.toLowerCase());
+        const searchLower = searchTerm.toLowerCase();
+        const matchesSearch = searchTerm === '' ||
+            meal.title.toLowerCase().includes(searchLower) ||
+            meal.description?.toLowerCase().includes(searchLower) ||
+            meal.tags.some(tag => tag.toLowerCase().includes(searchLower));
         const matchesFilter = activeFilter === 'All' || meal.tags.includes(activeFilter);
         return matchesSearch && matchesFilter;
     }).sort((a, b) => {
@@ -34,6 +38,10 @@ export const OrderMeals = () => {
         if (sortBy === 'protein') return b.protein - a.protein;
         return 0;
     });
+
+    console.log('Search term:', searchTerm);
+    console.log('Active filter:', activeFilter);
+    console.log('Filtered meals count:', filteredMeals.length);
 
     return (
         <div className="space-y-6">
@@ -65,8 +73,17 @@ export const OrderMeals = () => {
                         placeholder="Search for meals..."
                         className="pl-9 max-w-md bg-card border-none shadow-sm"
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={(e) => {
+                            const newValue = e.target.value;
+                            console.log('Search input changed:', newValue);
+                            setSearchTerm(newValue);
+                        }}
                     />
+                    {searchTerm && (
+                        <p className="text-sm text-muted-foreground mt-1">
+                            Searching for: "{searchTerm}" - Found {filteredMeals.length} meals
+                        </p>
+                    )}
                 </div>
 
                 <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
