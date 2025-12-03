@@ -14,7 +14,7 @@ const Hero = () => {
               <br />
               Train Hard.
               <br />
-              <span className="gradient-primary bg-clip-text text-transparent">
+              <span className="gradient-primary bg-clip-text text-transparent inline-block">
                 Track Everything.
               </span>
             </h1>
