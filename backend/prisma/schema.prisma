@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String   @id @default(uuid())
+  name              String
+  email             String   @unique
+  passwordHash      String
+  // Store membership status inside User
+  membershipPlanId String? 
+  membershipPlan   MembershipPlan? @relation(fields: [membershipPlanId], references: [id])
+  membershipStart  DateTime?
+  membershipEnd    DateTime?
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  age               Int?
+  gender            String?
+  heightCm          Int?
+  weightKg          Float?
+  goalType          String?
+  activityLevel     String?
+  dietaryPreference String?
+  orders            Order[]
+}
+
+model MembershipPlan {
+  id          String   @id @default(uuid())
+  name        String   // Basic, Pro, Elite
+  price       Float
+  durationDays Int      // e.g., 30 days
+  benefits    String[]
+  users       User[]
+}
+
+model Order {
+  id              String      @id @default(uuid())
+  userId          String
+  user            User        @relation(fields: [userId], references: [id])
+  totalAmount     Float
+  status          String      // e.g., "Placed", "Preparing", "Out for Delivery", "Delivered"
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  deliveryAddress String
+  paymentMethod   String
+
+  items           OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  mealName  String
+  mealImage String?
+  quantity  Int
+  price     Float
+  calories  Int?
+  protein   Int?
+}
